@@ -27,10 +27,6 @@ router.get("/", async (req, res) => {
     }
 });
 
-// later we can add here:
-// router.get("/:id", ...)
-// router.post("/", ...)
-// router.put("/:id", ...)
-// router.delete("/:id", ...)
+
 
 module.exports = router;
