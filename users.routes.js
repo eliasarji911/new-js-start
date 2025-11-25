@@ -1,81 +1,139 @@
-
 const express = require("express");
 const db = require("./db.config.js");
-
+const bcrypt = require("bcrypt");
+const multer = require("multer");
 const router = express.Router();
 
 
-router.get("/test", (req, res) => {
-    res.send("Users router is working");
+// Multer config for avatar uploads
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "uploads/"); // folder relative to project root
+  },
+  filename: (req, file, cb) => {
+    const ext = path.extname(file.originalname);
+    const userId = req.params.id; // from URL /users/:id/avatar
+    cb(null, `user-${userId}-${Date.now()}${ext}`);
+  }
 });
 
-
-router.get("/debug-all", (req, res) => {
-    db.query("SELECT * FROM users", (err, rows) => {
-        if (err) {
-            console.error("debug-all error:", err);
-           // return res.status(500).send(err.message);
-        }
-        res.json(rows);
-    });
-});
+const upload = multer({ storage });
 
 
-router.post("/register", (req, res) => {
-    console.log("BODY from client:", req.body);
-
+// ------------------------ REGISTER ------------------------
+router.post("/register", async (req, res) => {
     const { user_name, pass, emIL, name } = req.body || {};
 
- 
     if (!user_name || !pass || !emIL || !name) {
         return res.status(400).send("user_name, pass, emIL and name are required");
     }
 
-    const sql = `
-        INSERT INTO users (user_name, pass, emIL, name)
-        VALUES (?, ?, ?, ?)
-    `;
+    try {
+        // Hash the password
+        const hashedPassword = await bcrypt.hash(pass, 10);
 
-    const params = [user_name, pass, emIL, name];
+        const sql = `
+            INSERT INTO users (user_name, pass, emIL, name)
+            VALUES (?, ?, ?, ?)
+        `;
 
-    console.log("Running SQL:", sql.trim(), "with params:", params);
+        db.query(sql, [user_name, hashedPassword, emIL, name], (err, result) => {
+            if (err) {
+                console.error("DB INSERT error:", err);
+                return res.status(500).send(err.sqlMessage || "Database error");
+            }
 
-    db.query(sql, params, (err, result) => {
-        if (err) {
-            console.error("DB INSERT error:", err);
-          //  return res.status(500).send(err.sqlMessage || "Database error");
+            res.status(201).json({
+                id: result.insertId,
+                user_name,
+                name,
+                emIL
+            });
+        });
+    } catch (err) {
+        console.error("Register error:", err);
+        res.status(500).send("Server error");
+    }
+});
+
+// ------------------------ LOGIN ------------------------
+router.post("/login", (req, res) => {
+    const { user_name, pass } = req.body || {};
+
+    if (!user_name || !pass) {
+        return res.status(400).send({ message: "Missing username or password" });
+    }
+
+    const sql = "SELECT * FROM users WHERE user_name = ?";
+
+    db.query(sql, [user_name], async (err, rows) => {
+        if (err) return res.status(500).send({ message: "Database error" });
+
+        if (rows.length === 0) {
+            return res.status(401).send({ message: "Invalid username or password" });
         }
 
-        res.status(201).json({
-            id: result.insertId,
-            user_name,
-            name,
-            emIL
+        const user = rows[0];
+
+        // Compare password with hash
+        const match = await bcrypt.compare(pass, user.pass);
+
+        if (!match) {
+            return res.status(401).send({ message: "Invalid username or password" });
+        }
+
+        res.send({
+            message: "Login successful",
+            id: user.id,
+            user_name: user.user_name
         });
     });
 });
 
+// ------------------------ UPDATE USER ------------------------
+router.put("/update", (req, res) => {
+    const {
+        current_user_name,
+        current_pass,
+        new_user_name,
+        new_pass
+    } = req.body || {};
 
-router.delete("/:id", (req, res) => {
-    const id = req.params.id;
+    if (!current_user_name || !current_pass || !new_user_name || !new_pass) {
+        return res.status(400).send("All fields are required for update");
+    }
 
-    const sql = "DELETE FROM users WHERE id = ?";
-    
-    db.query(sql, [id], (err, result) => {
-        if (err) {
-            console.error("DELETE error:", err);
-         //   return res.status(500).send(err.message);
+    const sqlSelect = "SELECT * FROM users WHERE user_name = ?";
+
+    db.query(sqlSelect, [current_user_name], async (err, rows) => {
+        if (err) return res.status(500).send("Database error");
+
+        if (rows.length === 0)
+            return res.status(401).send("Current username or password is incorrect");
+
+        const user = rows[0];
+
+        // check password
+        const match = await bcrypt.compare(current_pass, user.pass);
+        if (!match) {
+            return res.status(401).send("Current username or password is incorrect");
         }
 
-        if (result.affectedRows === 0) {
-         //   return res.status(404).send("User not found");
-        }
+        // hash new password
+        const hashedNewPassword = await bcrypt.hash(new_pass, 10);
 
-        res.send("User deleted successfully");
+        const sqlUpdate = "UPDATE users SET user_name = ?, pass = ? WHERE id = ?";
+
+        db.query(sqlUpdate, [new_user_name, hashedNewPassword, user.id], (err2) => {
+            if (err2) return res.status(500).send("Database error");
+            res.send("User updated successfully");
+        });
     });
 });
 
 module.exports = router;
+
+
 
 
 

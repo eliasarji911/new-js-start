@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>User Home</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  
+  <h1>Welcome, <span id="welcomeName"></span>!</h1>
+
+  <hr>
+
+  
+  <section id="accountSection">
+    <h2>Account settings</h2>
+
+    <form id="updateForm">
+      <h3>Update username & password</h3>
+
+      <label>Current username:</label>
+      <input type="text" id="current_user_name" required><br>
+
+      <label>Current password:</label>
+      <input type="password" id="current_pass" required><br>
+
+      <label>New username:</label>
+      <input type="text" id="new_user_name" required><br>
+
+      <label>New password:</label>
+      <input type="password" id="new_pass" required><br>
+
+      <button type="submit">Update account</button>
+    </form>
+
+    <p id="updateResult"></p>
+  </section>
+
+  <hr>
+
+  
+  <section id="tasksSection">
+    <h2>My Tasks</h2>
+    <p>Logged in as: <strong id="currentUserLabel"></strong></p>
+
+    
+    <form id="taskForm">
+      <label>Task title (required):</label>
+      <input type="text" id="taskTitle" required>
+
+      <label>Description (optional):</label>
+      <textarea id="taskDesc" rows="3"></textarea>
+
+      <button type="submit">Add Task</button>
+    </form>
+
+<h3>Your tasks</h3>
+
+<!-- FILTER BUTTONS -->
+<div id="taskFilters" style="margin-bottom: 10px;">
+  <button type="button" data-filter="all">All</button>
+  <button type="button" data-filter="done">Done</button>
+  <button type="button" data-filter="notDone">Not done</button>
+  <button type="button" data-filter="hasDesc">With description</button>
+</div>
+
+<!-- SEARCH BY TITLE -->
+<div id="taskSearch" style="margin-bottom: 10px;">
+  <input type="text" id="taskSearchInput" placeholder="Search by title...">
+  <button type="button" id="taskSearchBtn">Search</button>
+  <button type="button" id="taskClearSearchBtn">Clear</button>
+</div>
+
+<!-- SORTING -->
+<div id="taskSort" style="margin-bottom: 10px;">
+  <label for="taskSortSelect">Sort by:</label>
+  <select id="taskSortSelect">
+    <option value="newest">Newest first (ID ↓)</option>
+    <option value="oldest">Oldest first (ID ↑)</option>
+    <option value="titleAZ">Title A → Z</option>
+    <option value="titleZA">Title Z → A</option>
+    <option value="doneFirst">Done first</option>
+    <option value="notDoneFirst">Not done first</option>
+  </select>
+</div>
+
+<table border="1">
+
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Title</th>
+      <th>Description</th>
+      <th>Done?</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody id="tasksBody">
+    <!-- JS will add rows here -->
+  </tbody>
+</table>
+
+<p id="tasksMessage"></p>
+
+
+<!-- EDIT TASK SECTION -->
+<section id="editTaskSection" style="display: none; margin-top: 20px;">
+  <h3 id="editTaskTitle">Edit task</h3>
+
+  <form id="editTaskForm">
+    <label>Title:</label>
+    <input type="text" id="editTaskTitleInput" required><br>
+
+    <label>Description (optional):</label><br>
+    <textarea id="editTaskDescInput" rows="3"></textarea><br>
+
+    <button type="submit">Save changes</button>
+    <button type="button" id="cancelEditBtn">Cancel</button>
+  </form>
+</section>
+
+  <script src="user.js"></script>
+</body>
+</html>
+

@@ -1,6 +1,5 @@
-
 require("dotenv").config();
-
+const path = require("path");
 console.log("index.js started");
 
 if (!process.env.DB_HOST) {
@@ -8,23 +7,22 @@ if (!process.env.DB_HOST) {
 }
 
 const express = require("express");
-const db = require("./db.config.js");           
-const usersRouter = require("./users.routes.js");  
-const tasksRouter = require("./tasks.routes.js");  
+const db = require("./db.config.js");
+const usersRouter = require("./users.routes.js");
+const tasksRouter = require("./tasks.routes.js");
 
 const app = express();
 
+app.use("/uploads",express.static(path.join(__dirname,"uploads")));
 app.use(express.json());
-
+app.use(express.static("public"));  
 
 app.use("/users", usersRouter);
 app.use("/tasks", tasksRouter);
 
-
 app.get("/", (req, res) => {
     res.send("Server is working!");
 });
-
 
 app.get("/test-db", (req, res) => {
     db.query("SELECT 1 + 1 AS result", (err, rows) => {
@@ -36,11 +34,11 @@ app.get("/test-db", (req, res) => {
     });
 });
 
-
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log("Server running on port " + PORT);
 });
+
 
 
 
