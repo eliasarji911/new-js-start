@@ -5,14 +5,14 @@ const multer = require("multer");
 const router = express.Router();
 
 
-// Multer config for avatar uploads
+
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "uploads/"); // folder relative to project root
+    cb(null, "uploads/"); 
   },
   filename: (req, file, cb) => {
     const ext = path.extname(file.originalname);
-    const userId = req.params.id; // from URL /users/:id/avatar
+    const userId = req.params.id; 
     cb(null, `user-${userId}-${Date.now()}${ext}`);
   }
 });
@@ -20,7 +20,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 
-// ------------------------ REGISTER ------------------------
+
 router.post("/register", async (req, res) => {
     const { user_name, pass, emIL, name } = req.body || {};
 
@@ -29,7 +29,7 @@ router.post("/register", async (req, res) => {
     }
 
     try {
-        // Hash the password
+        
         const hashedPassword = await bcrypt.hash(pass, 10);
 
         const sql = `
@@ -56,7 +56,7 @@ router.post("/register", async (req, res) => {
     }
 });
 
-// ------------------------ LOGIN ------------------------
+
 router.post("/login", (req, res) => {
     const { user_name, pass } = req.body || {};
 
@@ -75,7 +75,7 @@ router.post("/login", (req, res) => {
 
         const user = rows[0];
 
-        // Compare password with hash
+       
         const match = await bcrypt.compare(pass, user.pass);
 
         if (!match) {
@@ -90,7 +90,7 @@ router.post("/login", (req, res) => {
     });
 });
 
-// ------------------------ UPDATE USER ------------------------
+
 router.put("/update", (req, res) => {
     const {
         current_user_name,
@@ -113,13 +113,13 @@ router.put("/update", (req, res) => {
 
         const user = rows[0];
 
-        // check password
+        
         const match = await bcrypt.compare(current_pass, user.pass);
         if (!match) {
             return res.status(401).send("Current username or password is incorrect");
         }
 
-        // hash new password
+        
         const hashedNewPassword = await bcrypt.hash(new_pass, 10);
 
         const sqlUpdate = "UPDATE users SET user_name = ?, pass = ? WHERE id = ?";

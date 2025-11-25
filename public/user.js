@@ -1,13 +1,10 @@
-// user.js
 
-// ------------ READ LOGGED USER ------------
 const userId = localStorage.getItem("userId");
 let userName = localStorage.getItem("userName");
 
-// IMPORTANT: Protect user page
+
 if (!userId) {
-  // Only redirect if the page is user.html
-  // (prevents redirect when login.js loads user.js accidentally)
+ 
   if (window.location.pathname.includes("user.html")) {
     alert("You must log in first");
     window.location.href = "index.html";
@@ -15,7 +12,7 @@ if (!userId) {
 }
 
 
-// Show name in the page
+
 const welcomeSpan = document.getElementById("welcomeName");
 const currentUserLabel = document.getElementById("currentUserLabel");
 
@@ -26,9 +23,7 @@ if (currentUserLabel) {
   currentUserLabel.textContent = userName ? userName : "User #" + userId;
 }
 
-// =====================================================
-//                ACCOUNT UPDATE SECTION
-// =====================================================
+
 
 const updateForm = document.getElementById("updateForm");
 const updateResult = document.getElementById("updateResult");
@@ -61,18 +56,18 @@ updateForm.addEventListener("submit", async (e) => {
       return;
     }
 
-    // Success
+ 
     updateResult.style.color = "green";
     updateResult.textContent = text || "User updated successfully";
 
-    // Update localStorage + labels
+   
     userName = new_user_name;
     localStorage.setItem("userName", userName);
 
     if (welcomeSpan) welcomeSpan.textContent = userName;
     if (currentUserLabel) currentUserLabel.textContent = userName;
 
-    // Optional: clear password fields
+   
     document.getElementById("current_pass").value = "";
     document.getElementById("new_pass").value = "";
 
@@ -83,15 +78,13 @@ updateForm.addEventListener("submit", async (e) => {
   }
 });
 
-// =====================================================
-//                     TASKS SECTION
-// =====================================================
+
 
 const taskForm = document.getElementById("taskForm");
 const tasksBody = document.getElementById("tasksBody");
 const tasksMessage = document.getElementById("tasksMessage");
 
-// Edit section elements
+
 const editTaskSection = document.getElementById("editTaskSection");
 const editTaskForm = document.getElementById("editTaskForm");
 const editTaskTitleLabel = document.getElementById("editTaskTitle");
@@ -99,20 +92,20 @@ const editTaskTitleInput = document.getElementById("editTaskTitleInput");
 const editTaskDescInput = document.getElementById("editTaskDescInput");
 const cancelEditBtn = document.getElementById("cancelEditBtn");
 
-// Filter + search + sort
+
 const filterContainer = document.getElementById("taskFilters");
 const taskSearchInput = document.getElementById("taskSearchInput");
 const taskSearchBtn = document.getElementById("taskSearchBtn");
 const taskClearSearchBtn = document.getElementById("taskClearSearchBtn");
 const taskSortSelect = document.getElementById("taskSortSelect");
 
-let tasks = [];              // all tasks for this user
+let tasks = [];              
 let editingTask = null;
-let currentFilter = "all";   // all | done | notDone | hasDesc
-let currentSearch = "";      // search keyword
-let currentSort = "newest";  // newest | oldest | titleAZ | titleZA | doneFirst | notDoneFirst
+let currentFilter = "all";   
+let currentSearch = "";      
+let currentSort = "newest"; 
 
-// ====================== ADD TASK ======================
+
 taskForm.addEventListener("submit", async (e) => {
   e.preventDefault();
 
@@ -147,7 +140,7 @@ taskForm.addEventListener("submit", async (e) => {
   }
 });
 
-// ====================== LOAD TASKS ======================
+
 async function loadTasks() {
   try {
     const res = await fetch(`http://localhost:3000/tasks/user/${userId}`);
@@ -168,7 +161,7 @@ async function loadTasks() {
   }
 }
 
-// Helper to split stored text -> { title, description }
+
 function splitText(text) {
   if (!text) return { title: "", description: "" };
   const parts = text.split(" - ");
@@ -178,11 +171,11 @@ function splitText(text) {
   return { title: parts[0], description: parts.slice(1).join(" - ") };
 }
 
-// ====================== RENDER TASKS ======================
+
 function renderTasks() {
   tasksBody.innerHTML = "";
 
-  // 1) FILTER + SEARCH
+ 
   const filtered = tasks.filter(task => {
     const { title, description } = splitText(task.text);
 
@@ -208,7 +201,7 @@ function renderTasks() {
     tasksMessage.textContent = "";
   }
 
-  // 2) SORTING
+
   const sorted = [...filtered].sort((a, b) => {
     const aSplit = splitText(a.text);
     const bSplit = splitText(b.text);
@@ -226,7 +219,7 @@ function renderTasks() {
     }
   });
 
-  // 3) DISPLAY ROWS
+
   sorted.forEach(task => {
     const tr = document.createElement("tr");
     const { title, description } = splitText(task.text);
@@ -251,7 +244,7 @@ function renderTasks() {
   });
 }
 
-// ====================== FILTER EVENTS ======================
+
 if (filterContainer) {
   filterContainer.querySelectorAll("button").forEach(btn => {
     btn.addEventListener("click", () => {
@@ -261,7 +254,7 @@ if (filterContainer) {
   });
 }
 
-// ====================== SEARCH EVENTS ======================
+
 taskSearchBtn.addEventListener("click", () => {
   currentSearch = taskSearchInput.value.trim();
   renderTasks();
@@ -273,7 +266,7 @@ taskClearSearchBtn.addEventListener("click", () => {
   renderTasks();
 });
 
-// ====================== SORT EVENTS ======================
+
 if (taskSortSelect) {
   taskSortSelect.addEventListener("change", () => {
     currentSort = taskSortSelect.value;
@@ -281,7 +274,7 @@ if (taskSortSelect) {
   });
 }
 
-// ====================== EDIT TASK ======================
+
 function startEditTask(task) {
   editingTask = task;
 
@@ -331,13 +324,13 @@ editTaskForm.addEventListener("submit", async (e) => {
   }
 });
 
-// Cancel edit
+
 cancelEditBtn.addEventListener("click", () => {
   editingTask = null;
   editTaskSection.style.display = "none";
 });
 
-// ====================== TOGGLE DONE ======================
+
 async function toggleDone(task) {
   try {
     const newDone = task.is_done ? 0 : 1;
@@ -361,7 +354,7 @@ async function toggleDone(task) {
   }
 }
 
-// ====================== DELETE TASK ======================
+
 async function deleteTask(id) {
   if (!confirm("Delete this task?")) return;
 

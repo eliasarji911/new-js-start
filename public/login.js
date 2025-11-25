@@ -1,4 +1,4 @@
-// login.js
+
 
 document.addEventListener("DOMContentLoaded", () => {
   console.log("login.js loaded");
@@ -9,13 +9,13 @@ document.addEventListener("DOMContentLoaded", () => {
   console.log("loginForm =", loginForm);
   console.log("signupBtn =", signupBtn);
 
-  // If we can't find the form, nothing will work
+
   if (!loginForm) {
     console.error("loginForm not found in index.html");
     return;
   }
 
-  // ---- LOGIN HANDLER ----
+
   loginForm.addEventListener("submit", async (e) => {
     e.preventDefault();
     console.log("Login form submitted");
@@ -40,7 +40,7 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
 
-      // Save user info for user.html
+
       localStorage.setItem("userId", data.id);
       localStorage.setItem("userName", data.user_name);
 
@@ -49,7 +49,7 @@ document.addEventListener("DOMContentLoaded", () => {
         userName: data.user_name
       });
 
-      // Go to user page
+ 
       window.location.href = "user.html";
     } catch (err) {
       console.error("Login error:", err);
@@ -57,10 +57,10 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // ---- SIGNUP BUTTON ----
+
   if (signupBtn) {
     signupBtn.addEventListener("click", () => {
-      window.location.href = "register.html"; // or whatever your signup page is
+      window.location.href = "register.html"; 
     });
   }
 });
