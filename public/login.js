@@ -1,68 +1,117 @@
+// login.js
 
+const loginForm = document.getElementById("loginForm");
+const resultP = document.getElementById("result");
 
-document.addEventListener("DOMContentLoaded", () => {
-  console.log("login.js loaded");
+function showResult(msg, ok) {
+  if (!resultP) return;
 
-  const loginForm = document.getElementById("loginForm");
-  const signupBtn = document.getElementById("goToSignup");
+  resultP.classList.remove("success", "error", "show");
+  resultP.textContent = msg;
+  resultP.classList.add(ok ? "success" : "error");
+  requestAnimationFrame(() => resultP.classList.add("show"));
+}
 
-  console.log("loginForm =", loginForm);
-  console.log("signupBtn =", signupBtn);
-
-
-  if (!loginForm) {
-    console.error("loginForm not found in index.html");
-    return;
+async function withLoading(btn, fn) {
+  btn.disabled = true;
+  btn.classList.add("loading");
+  try {
+    return await fn();
+  } finally {
+    btn.classList.remove("loading");
+    btn.disabled = false;
   }
+}
 
+async function fetchWithTimeout(url, options = {}, timeoutMs = 8000) {
+  const controller = new AbortController();
+  const id = setTimeout(() => controller.abort(), timeoutMs);
 
-  loginForm.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    console.log("Login form submitted");
+  try {
+    return await fetch(url, { ...options, signal: controller.signal });
+  } finally {
+    clearTimeout(id);
+  }
+}
 
-    const user_name = document.getElementById("loginUserName").value;
-    const pass = document.getElementById("loginPass").value;
+loginForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
 
-    console.log("Sending login request:", { user_name, pass });
+  const user_name = document.getElementById("user_name").value.trim();
+  const pass = document.getElementById("pass").value.trim();
 
+  const btn = loginForm.querySelector('button[type="submit"]');
+
+  await withLoading(btn, async () => {
     try {
-      const res = await fetch("http://localhost:3000/users/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ user_name, pass })
-      });
+      const res = await fetchWithTimeout(
+        "http://localhost:3000/users/login",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ user_name, pass }),
+        },
+        8000
+      );
 
-      const data = await res.json().catch(() => ({}));
-      console.log("Login response:", res.status, data);
+      const isJson = (res.headers.get("content-type") || "").includes("application/json");
+
+      // Try to read server response safely (json or text)
+      let data = null;
+      let text = "";
+      if (isJson) {
+        try {
+          data = await res.json();
+        } catch {
+          data = null;
+        }
+      } else {
+        text = await res.text();
+      }
 
       if (!res.ok) {
-        alert(data.message || "Login failed");
+        const msg = (data && data.message) ? data.message : (text || "Login failed");
+        showResult(`${res.status}: ${msg}`, false);
+        if (window.mascotUI) window.mascotUI.errorShake();
         return;
       }
 
+      // ✅ Success: store the SAME keys that user.js uses
+      // Clear previous session keys first
+      localStorage.removeItem("userId");
+      localStorage.removeItem("userName");
+      localStorage.removeItem("user_name"); // legacy key you used before
 
-      localStorage.setItem("userId", data.id);
-      localStorage.setItem("userName", data.user_name);
+      const userId = data?.id;
+      const userName = data?.user_name;
 
-      console.log("Saved to localStorage:", {
-        userId: data.id,
-        userName: data.user_name
-      });
+      // Validate response shape
+      if (!userId || !userName) {
+        showResult("Login succeeded but server response is missing id/user_name", false);
+        if (window.mascotUI) window.mascotUI.errorShake();
+        return;
+      }
 
- 
+      localStorage.setItem("userId", String(userId));
+      localStorage.setItem("userName", String(userName));
+
+      // (Optional) keep the old key too, harmless:
+      localStorage.setItem("user_name", String(userName));
+
+      showResult("Login successful", true);
+
+      // ✅ Redirect
       window.location.href = "user.html";
     } catch (err) {
-      console.error("Login error:", err);
-      alert("Network error");
+      const msg =
+        err.name === "AbortError"
+          ? "Request timed out (server didn’t respond)."
+          : "Network error (server not running or blocked).";
+
+      showResult(msg, false);
+      if (window.mascotUI) window.mascotUI.errorShake();
     }
   });
-
-
-  if (signupBtn) {
-    signupBtn.addEventListener("click", () => {
-      window.location.href = "register.html"; 
-    });
-  }
 });
 
 

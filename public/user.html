@@ -1,125 +1,60 @@
+<!-- public/user.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>User Home</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Home</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
-<body>
-  
-  <h1>Welcome, <span id="welcomeName"></span>!</h1>
+<body class="homePage">
+  <header class="topBar">
+    <div>
+      <div class="topTitle">Dashboard</div>
+      <div class="muted">Logged in as: <strong id="meLabel">—</strong></div>
+    </div>
+    <button id="logoutBtn" class="btnSecondary" type="button">Logout</button>
+  </header>
 
-  <hr>
+  <main class="homeGrid">
+    <a class="homeCard" href="todo.html">
+      <div class="homeCardTitle">✅ ToDo</div>
+      <div class="homeCardSub">Manage your tasks</div>
+    </a>
 
-  
-  <section id="accountSection">
-    <h2>Account settings</h2>
+    <a class="homeCard" href="contacts.html">
+      <div class="homeCardTitle">👥 Contacts</div>
+      <div class="homeCardSub">Search users, requests, friends</div>
+    </a>
 
-    <form id="updateForm">
-      <h3>Update username & password</h3>
+    <a class="homeCard" href="messages.html">
+      <div class="homeCardTitle">💬 Messages</div>
+      <div class="homeCardSub">Chat with friends</div>
+    </a>
 
-      <label>Current username:</label>
-      <input type="text" id="current_user_name" required><br>
+    <a class="homeCard" href="settings.html">
+      <div class="homeCardTitle">⚙️ Settings</div>
+      <div class="homeCardSub">Profile photo, account update</div>
+    </a>
+  </main>
 
-      <label>Current password:</label>
-      <input type="password" id="current_pass" required><br>
+  <script>
+    const userId = localStorage.getItem("userId");
+    const userName = localStorage.getItem("userName") || localStorage.getItem("user_name") || "";
+    if (!userId) window.location.href = "login.html";
 
-      <label>New username:</label>
-      <input type="text" id="new_user_name" required><br>
+    document.getElementById("meLabel").textContent = userName || "—";
 
-      <label>New password:</label>
-      <input type="password" id="new_pass" required><br>
-
-      <button type="submit">Update account</button>
-    </form>
-
-    <p id="updateResult"></p>
-  </section>
-
-  <hr>
-
-  
-  <section id="tasksSection">
-    <h2>My Tasks</h2>
-    <p>Logged in as: <strong id="currentUserLabel"></strong></p>
-
-    
-    <form id="taskForm">
-      <label>Task title (required):</label>
-      <input type="text" id="taskTitle" required>
-
-      <label>Description (optional):</label>
-      <textarea id="taskDesc" rows="3"></textarea>
-
-      <button type="submit">Add Task</button>
-    </form>
-
-<h3>Your tasks</h3>
-
-
-<div id="taskFilters" style="margin-bottom: 10px;">
-  <button type="button" data-filter="all">All</button>
-  <button type="button" data-filter="done">Done</button>
-  <button type="button" data-filter="notDone">Not done</button>
-  <button type="button" data-filter="hasDesc">With description</button>
-</div>
-
-
-<div id="taskSearch" style="margin-bottom: 10px;">
-  <input type="text" id="taskSearchInput" placeholder="Search by title...">
-  <button type="button" id="taskSearchBtn">Search</button>
-  <button type="button" id="taskClearSearchBtn">Clear</button>
-</div>
-
-
-<div id="taskSort" style="margin-bottom: 10px;">
-  <label for="taskSortSelect">Sort by:</label>
-  <select id="taskSortSelect">
-    <option value="newest">Newest first (ID ↓)</option>
-    <option value="oldest">Oldest first (ID ↑)</option>
-    <option value="titleAZ">Title A → Z</option>
-    <option value="titleZA">Title Z → A</option>
-    <option value="doneFirst">Done first</option>
-    <option value="notDoneFirst">Not done first</option>
-  </select>
-</div>
-
-<table border="1">
-
-  <thead>
-    <tr>
-      <th>ID</th>
-      <th>Title</th>
-      <th>Description</th>
-      <th>Done?</th>
-      <th>Actions</th>
-    </tr>
-  </thead>
-  <tbody id="tasksBody">
-
-  </tbody>
-</table>
-
-<p id="tasksMessage"></p>
-
-
-
-<section id="editTaskSection" style="display: none; margin-top: 20px;">
-  <h3 id="editTaskTitle">Edit task</h3>
-
-  <form id="editTaskForm">
-    <label>Title:</label>
-    <input type="text" id="editTaskTitleInput" required><br>
-
-    <label>Description (optional):</label><br>
-    <textarea id="editTaskDescInput" rows="3"></textarea><br>
-
-    <button type="submit">Save changes</button>
-    <button type="button" id="cancelEditBtn">Cancel</button>
-  </form>
-</section>
-
-  <script src="user.js"></script>
+    document.getElementById("logoutBtn").addEventListener("click", () => {
+      localStorage.removeItem("userId");
+      localStorage.removeItem("userName");
+      localStorage.removeItem("user_name");
+      window.location.href = "login.html";
+    });
+  </script>
 </body>
 </html>
+
+
+
 

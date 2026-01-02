@@ -1,0 +1,67 @@
+<!-- public/messages.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Messages</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="msgPage">
+
+  <header class="msgTopbar">
+    <div class="msgTopbarLeft">
+      <a class="btnSecondary" href="user.html">← Back</a>
+      <div class="msgTitleWrap">
+        <div class="msgTitle">Messages</div>
+        <div class="msgSubtitle">Logged in as: <strong id="meLabel">—</strong></div>
+      </div>
+    </div>
+
+    <div class="msgTopbarRight">
+      <button id="logoutBtn" class="btnSecondary" type="button">Logout</button>
+    </div>
+  </header>
+
+  <main class="chatLayout">
+    <!-- Contacts -->
+    <aside class="contactsPanel">
+      <div class="contactsHeader">
+        <input id="contactSearch" class="contactSearch" type="text" placeholder="Search contacts..." />
+        <button id="refreshBtn" class="btnTiny" type="button">Refresh</button>
+      </div>
+
+      <div id="contactsList" class="contactsList"></div>
+      <div id="contactsEmpty" class="muted small"></div>
+    </aside>
+
+    <!-- Chat -->
+    <section class="chatPanel">
+      <div class="chatHeaderBar">
+        <div class="chatHeaderLeft">
+          <img id="chatAvatar" class="chatAvatar" src="" alt="avatar" />
+          <div>
+            <div class="chatWithLabel">Chat with</div>
+            <div id="chatWith" class="chatWithName">—</div>
+          </div>
+        </div>
+        <button id="markReadBtn" class="btnTiny" type="button">Mark as read</button>
+      </div>
+
+      <div id="messagesArea" class="messagesArea">
+        <div class="muted">Select a contact to start chatting.</div>
+      </div>
+
+      <form id="sendForm" class="sendBar">
+        <input id="messageInput" type="text" placeholder="Type a message..." autocomplete="off" disabled />
+        <button id="sendBtn" class="btn" type="submit" disabled>Send</button>
+      </form>
+
+      <div id="statusLine" class="small muted"></div>
+    </section>
+  </main>
+
+  <script src="messages.js"></script>
+</body>
+</html>
+

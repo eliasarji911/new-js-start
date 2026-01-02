@@ -1,37 +1,74 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Sign Up – Todo App</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Register</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <h1>Create a new account</h1>
+  <div class="bg-blob one"></div>
+  <div class="bg-blob two"></div>
 
-  <form id="registerForm">
-      <label>Username:</label>
-      <input type="text" id="user_name" required><br>
+  <div class="container">
+    <div class="card" id="card">
+      <h1>Create account</h1>
+      <p class="sub">Join us — it takes less than a minute</p>
 
-      <label>Password:</label>
-      <input type="password" id="pass" required><br>
+      <!-- Mascot -->
+      <div class="mascot" id="mascot">
+        <div class="face neutral" id="face">
+          <div class="eyes">
+            <div class="eye"><div class="pupil" id="p1"></div><div class="lid"></div></div>
+            <div class="eye"><div class="pupil" id="p2"></div><div class="lid"></div></div>
+          </div>
 
-      <label>Email:</label>
-      <input type="text" id="emIL" required><br>
+          <div class="hands">
+            <div class="hand left"></div>
+            <div class="hand right"></div>
+          </div>
 
-      <label>Name:</label>
-      <input type="text" id="name" required><br>
+          <div class="mouth" id="mouth"></div>
+        </div>
+      </div>
 
-      <button type="submit">Create Account</button>
-  </form>
+      <form id="registerForm">
+        <label for="name">Name</label>
+        <div class="inputWrap">
+          <input type="text" id="name" placeholder="Your name" required />
+        </div>
 
-  <p id="result"></p>
+        <label for="emIL">Email</label>
+        <div class="inputWrap">
+          <input type="email" id="emIL" placeholder="example@mail.com" required />
+        </div>
 
-  <p>
-    Already have an account?
-    <button type="button" id="goLoginBtn">Go to Login</button>
-  </p>
+        <label for="user_name">Username</label>
+        <div class="inputWrap">
+          <input type="text" id="user_name" placeholder="Choose a username" required />
+        </div>
 
+        <label for="pass">Password</label>
+        <div class="inputWrap">
+          <input type="password" id="pass" placeholder="Create a password" required />
+        </div>
+
+        <button type="submit">Sign up</button>
+
+        <p id="result" aria-live="polite"></p>
+
+        <p class="alt">
+          Already have an account? <a href="index.html">Login</a>
+        </p>
+      </form>
+    </div>
+  </div>
+
+  <!-- IMPORTANT order -->
+  <script src="ui-anim.js"></script>
+  <script src="mascot.js"></script>
   <script src="register.js"></script>
 </body>
 </html>
+
 

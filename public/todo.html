@@ -1,0 +1,90 @@
+<!-- public/todo.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ToDo</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="page">
+  <header class="topBar">
+    <a class="btnSecondary" href="user.html">← Back</a>
+    <div>
+      <div class="topTitle">ToDo</div>
+      <div class="muted">Logged in as: <strong id="meLabel">—</strong></div>
+    </div>
+    <button id="logoutBtn" class="btnSecondary" type="button">Logout</button>
+  </header>
+
+  <main class="panel">
+    <h2 class="panelTitle">Add Task</h2>
+
+    <form id="taskForm" class="stack">
+      <label>Title</label>
+      <input id="taskTitle" type="text" required />
+      <label>Description (optional)</label>
+      <textarea id="taskDesc" rows="3"></textarea>
+      <button class="btn" type="submit">Add Task</button>
+    </form>
+
+    <div class="spacer"></div>
+
+    <h2 class="panelTitle">My Tasks</h2>
+
+    <div class="toolRow" id="taskFilters">
+      <button type="button" class="btnTiny" data-filter="all">All</button>
+      <button type="button" class="btnTiny" data-filter="done">Done</button>
+      <button type="button" class="btnTiny" data-filter="notDone">Not done</button>
+      <button type="button" class="btnTiny" data-filter="hasDesc">With description</button>
+    </div>
+
+    <div class="toolRow">
+      <input id="taskSearchInput" type="text" placeholder="Search by title..." />
+      <button id="taskSearchBtn" type="button" class="btnTiny">Search</button>
+      <button id="taskClearSearchBtn" type="button" class="btnTiny">Clear</button>
+    </div>
+
+    <div class="toolRow">
+      <label class="muted">Sort:</label>
+      <select id="taskSortSelect">
+        <option value="newest">Newest</option>
+        <option value="oldest">Oldest</option>
+        <option value="titleAZ">Title A→Z</option>
+        <option value="titleZA">Title Z→A</option>
+        <option value="doneFirst">Done first</option>
+        <option value="notDoneFirst">Not done first</option>
+      </select>
+    </div>
+
+    <div class="tableWrap">
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th><th>Title</th><th>Description</th><th>Done?</th><th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="tasksBody"></tbody>
+      </table>
+    </div>
+
+    <p id="tasksMessage" class="muted small"></p>
+
+    <section id="editTaskSection" class="panel" style="display:none; margin-top:14px;">
+      <h3 class="panelTitle">Edit Task</h3>
+      <form id="editTaskForm" class="stack">
+        <label>Title</label>
+        <input id="editTaskTitleInput" type="text" required />
+        <label>Description</label>
+        <textarea id="editTaskDescInput" rows="3"></textarea>
+        <div class="row">
+          <button class="btn" type="submit">Save</button>
+          <button id="cancelEditBtn" class="btnSecondary" type="button">Cancel</button>
+        </div>
+      </form>
+    </section>
+  </main>
+
+  <script src="todo.js"></script>
+</body>
+</html>

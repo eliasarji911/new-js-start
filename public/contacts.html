@@ -1,0 +1,49 @@
+<!-- public/contacts.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Contacts</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="page">
+  <header class="topBar">
+    <a class="btnSecondary" href="user.html">← Back</a>
+    <div>
+      <div class="topTitle">Contacts</div>
+      <div class="muted">Logged in as: <strong id="meLabel">—</strong></div>
+    </div>
+    <button id="logoutBtn" class="btnSecondary" type="button">Logout</button>
+  </header>
+
+  <main class="contactsGrid">
+    <section class="panel">
+      <h2 class="panelTitle">Search user</h2>
+      <div class="row">
+        <input id="searchInput" type="text" placeholder="username (exact)" />
+        <button id="searchBtn" class="btn" type="button">Search</button>
+      </div>
+      <div id="searchResult" class="cardMini"></div>
+      <p id="searchStatus" class="muted small"></p>
+    </section>
+
+    <section class="panel">
+      <h2 class="panelTitle">Friend requests</h2>
+
+      <div class="subTitle">Incoming</div>
+      <div id="incomingList" class="list"></div>
+      <div class="subTitle">Outgoing</div>
+      <div id="outgoingList" class="list"></div>
+    </section>
+
+    <section class="panel">
+      <h2 class="panelTitle">Friends</h2>
+      <div id="friendsList" class="list"></div>
+      <p class="muted small">Click a friend to open chat.</p>
+    </section>
+  </main>
+
+  <script src="contacts.js"></script>
+</body>
+</html>

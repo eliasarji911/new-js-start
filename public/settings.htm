@@ -1,0 +1,54 @@
+<!-- public/settings.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Settings</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="page">
+  <header class="topBar">
+    <a class="btnSecondary" href="user.html">← Back</a>
+    <div>
+      <div class="topTitle">Settings</div>
+      <div class="muted">Logged in as: <strong id="meLabel">—</strong></div>
+    </div>
+    <button id="logoutBtn" class="btnSecondary" type="button">Logout</button>
+  </header>
+
+  <main class="settingsGrid">
+    <section class="panel">
+      <h2 class="panelTitle">Profile photo</h2>
+      <div class="row">
+        <img id="profileImg" class="profileBig" src="" alt="profile" />
+        <div style="flex:1">
+          <form id="photoForm" class="stack">
+            <input id="photoInput" type="file" accept="image/*" />
+            <button class="btn" type="submit">Upload</button>
+          </form>
+          <p id="photoStatus" class="muted small"></p>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2 class="panelTitle">Update username & password</h2>
+      <form id="updateForm" class="stack">
+        <label>Current username</label>
+        <input id="current_user_name" type="text" required />
+        <label>Current password</label>
+        <input id="current_pass" type="password" required />
+        <label>New username</label>
+        <input id="new_user_name" type="text" required />
+        <label>New password</label>
+        <input id="new_pass" type="password" required />
+        <button class="btn" type="submit">Update</button>
+      </form>
+      <p id="updateResult" class="muted small"></p>
+    </section>
+  </main>
+
+  <script src="settings.js"></script>
+</body>
+</html>

@@ -2,30 +2,65 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>ToDo Login</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <h1>Login</h1>
+  <div class="bg-blob one"></div>
+  <div class="bg-blob two"></div>
 
+  <div class="container">
+    <div class="card" id="card">
+      <h1>Login</h1>
+      <p class="sub">Welcome back — please enter your details</p>
 
-  <form id="loginForm">
-    <label>Username:</label>
-    <input type="text" id="loginUserName" required><br>
+      <!-- Mascot -->
+      <div class="mascot" id="mascot">
+        <div class="face neutral" id="face">
+          <div class="eyes">
+            <div class="eye"><div class="pupil" id="p1"></div><div class="lid"></div></div>
+            <div class="eye"><div class="pupil" id="p2"></div><div class="lid"></div></div>
+          </div>
 
-    <label>Password:</label>
-    <input type="password" id="loginPass" required><br>
+          <div class="hands">
+            <div class="hand left"></div>
+            <div class="hand right"></div>
+          </div>
 
-    <button type="submit">Login</button>
-  </form>
+          <div class="mouth" id="mouth"></div>
+        </div>
+      </div>
 
-  <hr>
+      <form id="loginForm">
+        <label for="user_name">Username</label>
+        <div class="inputWrap">
+          <input type="text" id="user_name" placeholder="Enter username" required />
+        </div>
 
- 
-  <button id="goToSignup">Create New Account</button>
+        <label for="pass">Password</label>
+        <div class="inputWrap">
+          <input type="password" id="pass" placeholder="Enter password" required />
+        </div>
 
+        <button type="submit">Login</button>
+
+        <p id="result" aria-live="polite"></p>
+
+        <p class="alt">
+          Don’t have an account? <a href="register.html">Sign up</a>
+        </p>
+      </form>
+    </div>
+  </div>
+
+  <!-- IMPORTANT order -->
+  <script src="ui-anim.js"></script>
+  <script src="mascot.js"></script>
   <script src="login.js"></script>
 </body>
 </html>
+
 
 
 
